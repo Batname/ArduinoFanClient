@@ -92,7 +92,7 @@ void loop()
     else if(user_input.indexOf("Voltage") != -1) // Setup voltage
     {
        short NewVoltage = user_input.substring(7).toInt();
-       short usSpeed = NewVoltage;
+       usSpeed = NewVoltage;
 
        SetVoltage();
 
