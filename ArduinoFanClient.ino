@@ -1,3 +1,5 @@
+#include <string.h>
+
 #define BRAKE 0
 #define CW    1
 #define CCW   2
@@ -23,6 +25,8 @@
 #define MOTOR_1 0
 #define MOTOR_2 1
 
+#define SERIAL_BUFFER_SIZE 255
+
 short usSpeed = 150;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
  
@@ -46,14 +50,24 @@ void setup()
   Serial.begin(9600);              // Initiates the serial to do the monitoring
 }
 
+int incomingByte = 0;
+char buffer[SERIAL_BUFFER_SIZE] = {0};
+
 void loop() 
 {
   String user_input;
   
   while(Serial.available())
   {
-    user_input = Serial.readStringUntil('\n');
-    
+
+    Serial.readBytesUntil('\n', buffer, SERIAL_BUFFER_SIZE);
+
+    // Copy to string
+    user_input = String(buffer);
+
+    // clean buffer after read and copy to string
+    memset(buffer, 0, SERIAL_BUFFER_SIZE);
+        
     digitalWrite(EN_PIN_1, HIGH);
     digitalWrite(EN_PIN_2, HIGH);
 
@@ -101,7 +115,8 @@ void loop()
     }
     else
     {
-      //Serial.println("Invalid option entered.");
+      Serial.print("Invalid option entered.");
+      Serial.println(user_input);
     }
   }
 }
