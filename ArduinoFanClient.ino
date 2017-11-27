@@ -57,24 +57,47 @@ void loop()
     digitalWrite(EN_PIN_1, HIGH);
     digitalWrite(EN_PIN_2, HIGH);
 
-    if (user_input.equals("1"))
+    if (user_input.equals("Stop"))
     {
        Stop();
+
+       Serial.println("[Arduino client] Stop");
     }
-    else if(user_input.equals("2"))
+    else if(user_input.equals("Forward"))
     {      
       Forward();
+
+      Serial.println("[Arduino client] Forward");
     }
-    else if(user_input.equals("3"))
+    else if(user_input.equals("Reverse"))
     {
       Reverse();
+
+      Serial.println("[Arduino client] Reverse");
+    }
+    else if(user_input.indexOf("Init Voltage") != -1) // Setup voltage
+    {
+       short NewVoltage = user_input.substring(12).toInt();
+       usSpeed = NewVoltage;
+
+       // Set initial speed
+       SetVoltage();
+
+       // and then run motors
+       Forward();
+
+       Serial.print("[Arduino client] Init: ");
+       Serial.println(usSpeed);
     }
     else if(user_input.indexOf("Voltage") != -1) // Setup voltage
     {
        short NewVoltage = user_input.substring(7).toInt();
        short usSpeed = NewVoltage;
 
-       SetSpeed();
+       SetVoltage();
+
+       Serial.print("[Arduino client] SetVoltage: ");
+       Serial.println(usSpeed);
     }
     else
     {
@@ -85,7 +108,6 @@ void loop()
 
 void Stop()
 {
-  Serial.println("Stop");
   usMotor_Status = BRAKE;
   motorGo(MOTOR_1, usMotor_Status, 0);
   motorGo(MOTOR_2, usMotor_Status, 0);
@@ -93,7 +115,6 @@ void Stop()
 
 void Forward()
 {
-  Serial.println("Forward");
   usMotor_Status = CW;
   motorGo(MOTOR_1, usMotor_Status, usSpeed);
   motorGo(MOTOR_2, usMotor_Status, usSpeed);
@@ -101,13 +122,12 @@ void Forward()
 
 void Reverse()
 {
-  Serial.println("Reverse");
   usMotor_Status = CCW;
   motorGo(MOTOR_1, usMotor_Status, usSpeed);
   motorGo(MOTOR_2, usMotor_Status, usSpeed);
 }
 
-void SetSpeed()
+void SetVoltage()
 {
   if(usSpeed > 255)
   {
@@ -118,9 +138,6 @@ void SetSpeed()
   {
     usSpeed = 0;  
   }
-
-  Serial.print("[Arduino client] SetSpeed: ");
-  Serial.println(usSpeed);
 
   motorGo(MOTOR_1, usMotor_Status, usSpeed);
   motorGo(MOTOR_2, usMotor_Status, usSpeed);  
