@@ -29,7 +29,7 @@
 
 short usSpeed = 0;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
-#define MAX_SPEED 190
+#define MAX_SPEED 255
 
 /**
  * Divides a given PWM pin frequency by a divisor.
@@ -112,8 +112,8 @@ void setup()
   pinMode(EN_PIN_2, OUTPUT);
 
   // Set max Frequency to voltage control output
-  setPwmFrequency(5, 1);
-  setPwmFrequency(6, 1);
+  setPwmFrequency(5, 1024);
+  setPwmFrequency(6, 1024);
 
   Serial.begin(9600);              // Initiates the serial to do the monitoring
 }
