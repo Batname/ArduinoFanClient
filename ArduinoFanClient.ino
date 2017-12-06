@@ -29,7 +29,7 @@
 
 short usSpeed = 0;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
-#define MAX_SPEED 180
+#define MAX_SPEED 190
 
 /**
  * Divides a given PWM pin frequency by a divisor.
