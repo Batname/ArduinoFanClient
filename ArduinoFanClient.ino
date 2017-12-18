@@ -124,6 +124,8 @@ char buffer[SERIAL_BUFFER_SIZE] = {0};
 void loop() 
 {
   String user_input;
+  // clean buffer each  time before start
+  memset(buffer, 0, SERIAL_BUFFER_SIZE);
   
   while(Serial.available())
   {
@@ -183,8 +185,7 @@ void loop()
     }
     else
     {
-      Serial.print("Invalid option entered.");
-      Serial.println(user_input);
+      // nothing for now
     }
   }
 }
